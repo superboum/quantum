@@ -1,0 +1,22 @@
+{
+  "name": "quantum",
+  "version": "0.0.1",
+  "description": "A WebRTC game in space",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "space",
+    "ship",
+    "game",
+    "webrtc"
+  ],
+  "author": "Quentin Dufour",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "express": "^4.16.2",
+    "pug": "^2.0.0-rc.4",
+    "socket.io": "^2.0.4"
+  }
+}

@@ -20,12 +20,10 @@ class OpeningScene extends Scene {
     this.cameras['following'].centerOn = this.spaceship
 
     if (this.game.keydown[38]) this.spaceship.thrust()
-    if (this.game.keydown[39]) {
-      this.spaceship.pos.angle =
-        (this.spaceship.pos.angle + 0.1) % (Math.PI*2)
-    } else if (this.game.keydown[37]) {
-      this.spaceship.pos.angle =
-        (this.spaceship.pos.angle - 0.1) % (Math.PI*2)
-    }
+
+    if (this.game.keydown[39]) this.spaceship.rotateRight()
+    else if (this.game.keydown[37]) this.spaceship.rotateLeft()
+
+    if (this.game.keydown[32]) this.spaceship.fire()
   }
 }

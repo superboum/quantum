@@ -10,6 +10,18 @@ class SpaceShip extends PhysicalObject {
     this.thrusting = true
   }
 
+  rotateRight() {
+    this.pos.angle = (this.pos.angle + 0.1) % (Math.PI * 2)
+  }
+
+  rotateLeft() {
+    this.pos.angle = (this.pos.angle - 0.1) % (Math.PI * 2)
+  }
+
+  fire() {
+    console.log("poum poum")
+  }
+
   update() {
     super.update()
     this.thrusting = false

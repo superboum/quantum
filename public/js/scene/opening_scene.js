@@ -1,23 +1,31 @@
 class OpeningScene extends Scene {
-  constructor() {
-    super()
-    this.spaceship = new SpaceShip({x: 100, y: 100}, Math.PI * 3/4)
-    this.logo = new Logo();
+  constructor(game) {
+    super(game)
+    this.spaceship = new SpaceShip(
+      game,
+      {x: 100, y: 100, angle: Math.PI * 3/4},
+      'following'
+    )
+    this.logo = new Logo(game, 'following');
     this.gameObjects = [this.logo, this.spaceship]
   }
 
-  sound(game) {
-    this.logo.sound(game)
-    this.spaceship.sound(game)
+  sound() {
+    this.logo.sound()
+    this.spaceship.sound()
   }
 
-  update(game) {
-    super.update(game)
-    game.camera.centerOn = this.spaceship
-    if (game.keydown[38]) this.spaceship.thrust()
-    if (game.keydown[39])
-      this.spaceship.orientation = (this.spaceship.orientation + 0.1) % (Math.PI*2)
-    else if (game.keydown[37])
-      this.spaceship.orientation = (this.spaceship.orientation - 0.1) % (Math.PI*2)
+  update() {
+    super.update()
+    this.cameras['following'].centerOn = this.spaceship
+
+    if (this.game.keydown[38]) this.spaceship.thrust()
+    if (this.game.keydown[39]) {
+      this.spaceship.pos.angle =
+        (this.spaceship.pos.angle + 0.1) % (Math.PI*2)
+    } else if (this.game.keydown[37]) {
+      this.spaceship.pos.angle =
+        (this.spaceship.pos.angle - 0.1) % (Math.PI*2)
+    }
   }
 }

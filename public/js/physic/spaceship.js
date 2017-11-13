@@ -1,65 +1,58 @@
-class SpaceShip {
-  constructor(pos, orientation) {
-    this.pos = pos
+class SpaceShip extends PhysicalObject {
+  constructor(game, pos, camera) {
+    super(game,pos,camera)
     this.speed = 8
     this.thrusting = false
-    this.orientation = orientation
   }
 
   thrust() {
-    this.pos.x += Math.sin(this.orientation) * this.speed
-    this.pos.y -= Math.cos(this.orientation) * this.speed
+    this.pos.x += Math.sin(this.pos.angle) * this.speed
+    this.pos.y -= Math.cos(this.pos.angle) * this.speed
     this.thrusting = true
   }
 
-  update(game) {
+  update() {
     this.thrusting = false
   }
 
-  sound(game) {
+  sound() {
     if (this.thrusting)
-      game.sounds.playParallel("thrust.wav")
+      this.game.sounds.playParallel("thrust.wav")
   }
 
-  draw(game) {
-    // 30px width || 40 px height
-    game.camera.use()
-    //game.ctx.save()
-
+  draw() {
+    // 30px width || 43 px height
     // translation
-    game.ctx.translate(this.pos.x, this.pos.y)
+    this.game.ctx.translate(this.pos.x, this.pos.y)
 
     // rotation
-    game.ctx.translate(15, 30)
-    game.ctx.rotate(this.orientation)
-    game.ctx.translate(-15, -30)
+    this.game.ctx.translate(15, 30)
+    this.game.ctx.rotate(this.pos.angle)
+    this.game.ctx.translate(-15, -30)
 
     // color
-    game.ctx.strokeStyle = '#ddd'
+    this.game.ctx.strokeStyle = '#ddd'
 
     // spaceship main
-    game.ctx.beginPath()
-    game.ctx.moveTo(15,0)
-    game.ctx.lineTo(30,40)
-    game.ctx.lineTo(20,35)
-    game.ctx.lineTo(10,35)
-    game.ctx.lineTo(0,40)
-    game.ctx.closePath()
-    game.ctx.stroke()
+    this.game.ctx.beginPath()
+    this.game.ctx.moveTo(15,0)
+    this.game.ctx.lineTo(30,40)
+    this.game.ctx.lineTo(20,35)
+    this.game.ctx.lineTo(10,35)
+    this.game.ctx.lineTo(0,40)
+    this.game.ctx.closePath()
+    this.game.ctx.stroke()
 
     //thrust
     if (this.thrusting) {
-      game.ctx.beginPath()
-      game.ctx.moveTo(20,35)
-      game.ctx.lineTo(20,38)
-      game.ctx.lineTo(15,43)
-      game.ctx.lineTo(10,38)
-      game.ctx.lineTo(10,35)
-      game.ctx.closePath()
-      game.ctx.stroke()
+      this.game.ctx.beginPath()
+      this.game.ctx.moveTo(20,35)
+      this.game.ctx.lineTo(20,38)
+      this.game.ctx.lineTo(15,43)
+      this.game.ctx.lineTo(10,38)
+      this.game.ctx.lineTo(10,35)
+      this.game.ctx.closePath()
+      this.game.ctx.stroke()
     }
-
-    //game.ctx.restore()
-    game.camera.done()
   }
 }

@@ -1,12 +1,12 @@
-class Camera {
+class FollowingCamera extends BaseCamera {
   constructor(game) {
+    super(game)
     this.centerOn = null
-    this.game = game
   }
 
   use() {
+    this.game.ctx.save()
     if (this.centerOn && this.centerOn.pos) {
-      this.game.ctx.save()
       this.game.ctx.translate(
         this.game.canvas.width / 2 - this.centerOn.pos.x,
         this.game.canvas.height / 2 - this.centerOn.pos.y
@@ -15,7 +15,6 @@ class Camera {
   }
 
   done() {
-    if (this.centerOn && this.centerOn.pos)
-      this.game.ctx.restore()
+    this.game.ctx.restore()
   }
 }

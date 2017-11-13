@@ -6,9 +6,8 @@ class Game {
 
     this.fps = 30
     this.frames = 0
-    this.scenes = [ new OpeningScene() ]
+    this.scenes = [ new OpeningScene(this) ]
     this.sounds = new AudioManager()
-    this.camera = new Camera(this)
     this.keydown = {}
 
     this.resize()
@@ -25,9 +24,9 @@ class Game {
   run() {
     setInterval(() => {
       this.frames++
-      this.scenes[0].update(this)
-      this.scenes[0].sound(this)
-      this.scenes[0].draw(this)
+      this.scenes[0].update()
+      this.scenes[0].sound()
+      this.scenes[0].draw()
     }, 1000/this.fps)
   }
 }

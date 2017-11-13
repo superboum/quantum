@@ -1,14 +1,19 @@
-class Logo {
-  constructor() {
+class Logo extends PhysicalObject {
+  constructor(game, camera) {
+    super(game, {x: 200, y: 200, angle: 0}, camera)
     this.toPrint = 0
     this.lastPrint = 0
     this.keySound = false
     this.textToPrint = 'Quantum'
   }
 
-  update(game) {
+  update() {
     this.keySound = false
-    this.toPrint = Math.floor(Math.min(game.frames / game.fps / 0.2, this.textToPrint.length))
+    this.toPrint = Math.floor(
+      Math.min(
+        this.game.frames / this.game.fps / 0.2,
+        this.textToPrint.length
+    ))
 
     if (this.lastPrint != this.toPrint) {
       this.lastPrint = this.toPrint
@@ -16,23 +21,21 @@ class Logo {
     }
   }
 
-  sound(game) {
+  sound() {
     if (this.keySound)
-      game.sounds.playParallel("key.mp3")
+      this.game.sounds.playParallel("key.mp3")
   }
 
-  draw(game) {
-    game.ctx.fillStyle = '#222'
-    game.ctx.fillRect(0, 0, game.canvas.width, game.canvas.height)
-
-    game.camera.use()
-    game.ctx.textAlign = 'center'
-    game.ctx.textBaseline = 'middle'
-    game.ctx.font = '80px Hyperspace'
-    game.ctx.strokeStyle = '#dddddd'
-    game.ctx.fillStyle = '#dddddd'
-    game.ctx.fillText(this.textToPrint.substring(0,this.toPrint), game.canvas.width / 2, game.canvas.height / 2)
-    game.camera.done()
+  draw() {
+    this.game.ctx.textAlign = 'center'
+    this.game.ctx.textBaseline = 'middle'
+    this.game.ctx.font = '80px Hyperspace'
+    this.game.ctx.strokeStyle = '#dddddd'
+    this.game.ctx.fillStyle = '#dddddd'
+    this.game.ctx.fillText(
+      this.textToPrint.substring(0,this.toPrint),
+      this.pos.x,
+      this.pos.y)
   }
 }
 

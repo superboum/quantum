@@ -4,11 +4,19 @@ html
     title Quantum
     link(rel="stylesheet", href="/css/main.css")
   body
-    h1 Quantum
-    div
-      button(onclick="start()") Connect
-    div
-      video#remoteVideo(autoplay=true)
-      video#localVideo(autoplay=true)
+    canvas#game(width="800",height="600",moz-opaque=true)
+    //-div
+      //-button(onclick="start()") Connect
+    //-div
+      //-video#remoteVideo(autoplay=true)
+      //-video#localVideo(autoplay=true)
+
     script(src="/socket.io/socket.io.js")
-    script(src="/js/index.js")
+    script(src="https://unpkg.com/vue")
+
+    script(src="/js/sound.js")
+    script(src="/js/opening.js")
+    script(src="/js/game.js")
+    script.
+      const g = new Game('game')
+      g.run()

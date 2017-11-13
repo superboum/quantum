@@ -11,6 +11,11 @@ class OpeningScene extends Scene {
     this.gameObjects = [this.logo, this.spaceship]
   }
 
+  addMissile(m) {
+    this.missiles.push(m)
+    this.gameObjects.push(m)
+  }
+
   sound() {
     this.logo.sound()
     this.spaceship.sound()

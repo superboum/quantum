@@ -4,7 +4,7 @@ const socket = io()
 let pc
 const configuration = {"iceServers": [{"urls": "stun:stun.l.google.com:19302"}]}
 const localVideo = document.getElementById("localVideo")
-
+const remoteVideo = document.getElementById("remoteVideo")
 
 // NOTE: Les standards évoluent très vites
 // Le guide HTML5Rock n'est absolument plus à jour
@@ -20,7 +20,7 @@ function start() {
   };
 
   pc.ontrack = evt => {
-    console.log("onaddstream", evt.streams)
+    if (!remoteVideo.srcObject) remoteVideo.srcObject = evt.streams[0];
   }
 
   pc.onnegotiationneeded = () => {
@@ -42,16 +42,14 @@ function start() {
     .catch(err => console.log(err))
 }
 
-socket.on('signaling', (from,msg) => {
+socket.on('signaling', (msg) => {
   if (!pc) start()
 
-  console.log(msg)
-
-  if (msg.candidate) {
+  if (msg && msg.candidate) {
     pc
       .addIceCandidate(msg.candidate)
       .catch(err => console.log(err))
-  } else if (msg.desc) {
+  } else if (msg && msg.desc) {
     if (msg.desc.type == "offer") {
       pc
         .setRemoteDescription(msg.desc)

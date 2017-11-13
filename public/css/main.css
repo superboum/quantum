@@ -1,5 +1,16 @@
+@font-face {
+    font-family: Hyperspace;
+    src: url("/font/Hyperspace.otf") format("opentype");
+}
+
+@font-face {
+    font-family: Hyperspace;
+    font-weight: bold;
+    src: url("/font/Hyperspace Bold.otf") format("opentype");
+}
+
 html {
   background-color: #222;
-  font-family: Monospace;
+  font-family: Hyperspace;
   color: #ddd;
 }

@@ -17,6 +17,7 @@ io.on('connection', socket => {
 
   socket.on('signaling', msg => {
     console.log(msg)
+    socket.broadcast.emit('signaling', msg)
   })
 })
 

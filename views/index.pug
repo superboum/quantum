@@ -4,10 +4,11 @@ html
     title Quantum
     link(rel="stylesheet", href="/css/main.css")
   body
-    h1 Hello
+    h1 Quantum
     div
       button(onclick="start()") Connect
     div
+      video#remoteVideo(autoplay=true)
       video#localVideo(autoplay=true)
     script(src="/socket.io/socket.io.js")
     script(src="/js/index.js")

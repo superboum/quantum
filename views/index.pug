@@ -1,7 +1,13 @@
+doctype html
 html
   head
     title Quantum
+    link(rel="stylesheet", href="/css/main.css")
   body
     h1 Hello
+    div
+      button(onclick="start()") Connect
+    div
+      video#localVideo(autoplay=true)
     script(src="/socket.io/socket.io.js")
     script(src="/js/index.js")

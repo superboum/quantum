@@ -1,6 +1,7 @@
 class PhysicalObject {
-  constructor(game, pos, camera) {
-    this.game = game
+  constructor(scene, pos, camera) {
+    this.game = scene.game
+    this.scene = scene
     this.pos = pos
     this.speed = {x: 0, y: 0}
     this.accel = {x: 0, y: 0}

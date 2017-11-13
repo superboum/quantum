@@ -1,6 +1,6 @@
 class Logo extends PhysicalObject {
-  constructor(game, camera) {
-    super(game, {x: 200, y: 200, angle: 0}, camera)
+  constructor(scene, camera) {
+    super(scene, {x: 200, y: 200, angle: 0}, camera)
     this.toPrint = 0
     this.lastPrint = 0
     this.keySound = false

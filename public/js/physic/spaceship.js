@@ -1,6 +1,6 @@
 class SpaceShip extends PhysicalObject {
-  constructor(game, pos, camera) {
-    super(game,pos,camera)
+  constructor(scene, pos, camera) {
+    super(scene,pos,camera)
     this.thrusting = false
   }
 

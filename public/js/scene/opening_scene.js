@@ -2,11 +2,12 @@ class OpeningScene extends Scene {
   constructor(game) {
     super(game)
     this.spaceship = new SpaceShip(
-      game,
+      this,
       {x: 100, y: 100, angle: Math.PI * 3/4},
       'following'
     )
-    this.logo = new Logo(game, 'following');
+    this.logo = new Logo(this, 'following');
+    this.missiles = []
     this.gameObjects = [this.logo, this.spaceship]
   }
 

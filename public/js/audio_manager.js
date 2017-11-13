@@ -9,7 +9,7 @@ class AudioManager {
     }, {})
   }
 
-  play(name) {
+  playParallel(name) {
     this.sounds[name].cloneNode(true).play()
   }
 }

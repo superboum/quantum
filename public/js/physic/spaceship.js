@@ -16,9 +16,15 @@ class SpaceShip {
     this.thrusting = false
   }
 
+  sound(game) {
+    if (this.thrusting)
+      game.sounds.playParallel("thrust.wav")
+  }
+
   draw(game) {
     // 30px width || 40 px height
-    game.ctx.save()
+    game.camera.use()
+    //game.ctx.save()
 
     // translation
     game.ctx.translate(this.pos.x, this.pos.y)
@@ -30,7 +36,6 @@ class SpaceShip {
 
     // color
     game.ctx.strokeStyle = '#ddd'
-
 
     // spaceship main
     game.ctx.beginPath()
@@ -44,8 +49,6 @@ class SpaceShip {
 
     //thrust
     if (this.thrusting) {
-      game.sounds.play("thrust.wav")
-
       game.ctx.beginPath()
       game.ctx.moveTo(20,35)
       game.ctx.lineTo(20,38)
@@ -56,6 +59,7 @@ class SpaceShip {
       game.ctx.stroke()
     }
 
-    game.ctx.restore()
+    //game.ctx.restore()
+    game.camera.done()
   }
 }

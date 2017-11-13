@@ -7,6 +7,10 @@ class Scene {
     this.gameObjects.forEach(e => e.draw(game))
   }
 
+  sound(game) {
+    this.gameObjects.forEach(e => e.sound(game))
+  }
+
   keydown(game, e) {
   }
 }

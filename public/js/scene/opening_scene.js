@@ -6,8 +6,14 @@ class OpeningScene extends Scene {
     this.gameObjects = [this.logo, this.spaceship]
   }
 
+  sound(game) {
+    this.logo.sound(game)
+    this.spaceship.sound(game)
+  }
+
   update(game) {
     super.update(game)
+    game.camera.centerOn = this.spaceship
     if (game.keydown[38]) this.spaceship.thrust()
     if (game.keydown[39])
       this.spaceship.orientation = (this.spaceship.orientation + 0.1) % (Math.PI*2)

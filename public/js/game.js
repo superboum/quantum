@@ -12,8 +12,8 @@ class Game {
 
     this.resize()
     window.addEventListener('resize', () => this.resize(), false)
-    window.addEventListener('keydown', e => this.keydown[e.keyCode] = true, false);
-    window.addEventListener('keyup', e => this.keydown[e.keyCode] = false, false);
+    window.addEventListener('keydown', e => this.keydown[e.keyCode] = true, false)
+    window.addEventListener('keyup', e => this.keydown[e.keyCode] = false, false)
   }
 
   resize() {

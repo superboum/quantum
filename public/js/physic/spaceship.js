@@ -1,18 +1,21 @@
 class SpaceShip extends PhysicalObject {
   constructor(game, pos, camera) {
     super(game,pos,camera)
-    this.speed = 8
     this.thrusting = false
   }
 
   thrust() {
-    this.pos.x += Math.sin(this.pos.angle) * this.speed
-    this.pos.y -= Math.cos(this.pos.angle) * this.speed
+    this.accel.x = Math.sin(this.pos.angle) * 200
+    this.accel.y = -Math.cos(this.pos.angle) * 200
     this.thrusting = true
   }
 
   update() {
+    super.update()
     this.thrusting = false
+    this.accel = {x:0, y: 0}
+    this.speed.y /= 0.5 / this.game.fps + 1
+    this.speed.x /= 0.5 / this.game.fps + 1
   }
 
   sound() {

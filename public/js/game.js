@@ -6,11 +6,14 @@ class Game {
 
     this.fps = 30
     this.frames = 0
-    this.scenes = [ new Logo(), new SpaceShip({x: 100, y: 100}, 1) ]
+    this.scenes = [ new OpeningScene() ]
     this.sounds = new AudioManager()
+    this.keydown = {}
 
     this.resize()
     window.addEventListener('resize', () => this.resize(), false)
+    window.addEventListener('keydown', e => this.keydown[e.keyCode] = true, false);
+    window.addEventListener('keyup', e => this.keydown[e.keyCode] = false, false);
   }
 
   resize() {
@@ -18,22 +21,11 @@ class Game {
     this.canvas.height = window.innerHeight
   }
 
-  update() {
-    this.frames++;
-  }
-
-  draw() {
-    this.ctx.fillStyle = '#222'
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-    this.scenes[0].draw(this)
-    this.scenes[1].draw(this)
-  }
-
   run() {
     setInterval(() => {
-      this.update()
-      this.draw()
+      this.frames++
+      this.scenes[0].update(this)
+      this.scenes[0].draw(this)
     }, 1000/this.fps)
   }
 }

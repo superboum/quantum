@@ -5,11 +5,12 @@ class SpaceShip extends PhysicalObject {
     this.firing = false
     this.firingNext = 0
     this.hitbox = {x: 30, y: 40}
+    this.center = {x: this.hitbox.x / 2, y: this.hitbox.y / 2}
+    this.shiftAngle = -Math.PI / 2
   }
 
   thrust() {
-    this.accel.x = Math.sin(this.pos.angle) * 200
-    this.accel.y = -Math.cos(this.pos.angle) * 200
+    this.accel = Transform.projection(this.pos.angle + this.shiftAngle, 200)
     this.thrusting = true
   }
 
@@ -21,22 +22,25 @@ class SpaceShip extends PhysicalObject {
     this.pos.angle = (this.pos.angle - 0.1) % (Math.PI * 2)
   }
 
+  computeMissileStartPosition() {
+    const translation = {x: this.hitbox.x / 2, y: 0}
+    return Transform.rotateAround(
+      {x: this.pos.x + this.center.x, y: this.pos.y + this.center.y },
+      Transform.translate(this.pos, translation),
+      this.pos.angle
+    )
+  }
+
   fire() {
     if (this.firingNext > this.game.frames) return
     this.firingNext = this.game.frames + this.game.fps * 0.4
     const m = new Missile(
       this.scene,
-      {
-        x: this.pos.x + this.hitbox.x / 2,
-        y: this.pos.y
-      },
+      this.computeMissileStartPosition(),
       this.camera
     )
 
-    m.speed = {
-      x: Math.sin(this.pos.angle) * 200,
-      y: -Math.cos(this.pos.angle) * 200
-    }
+    m.speed = Transform.projection(this.pos.angle + this.shiftAngle, 200)
 
     this.scene.addMissile(m)
     this.firing = true
@@ -65,9 +69,9 @@ class SpaceShip extends PhysicalObject {
     this.game.ctx.translate(this.pos.x, this.pos.y)
 
     // rotation
-    this.game.ctx.translate(this.hitbox.x / 2, this.hitbox.y / 2)
+    this.game.ctx.translate(this.center.x, this.center.y)
     this.game.ctx.rotate(this.pos.angle)
-    this.game.ctx.translate(- this.hitbox.x / 2, - this.hitbox.y / 2)
+    this.game.ctx.translate(-this.center.x, -this.center.y)
 
     // color
     this.game.ctx.strokeStyle = '#ddd'

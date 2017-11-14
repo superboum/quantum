@@ -1,5 +1,7 @@
 import BaseCamera from '../camera/following_camera.js'
 import FollowingCamera from '../camera/following_camera.js'
+import Combination from '../foundation/combination.js'
+import Collision from '../foundation/collision.js'
 
 export default class Scene {
   constructor(game) {
@@ -11,8 +13,19 @@ export default class Scene {
     }
   }
 
+  handle_collisions() {
+    Combination.twoByTwoOnArray(
+      this.gameObjects.filter(g => g.hitbox)
+    ).forEach(g => {
+      if (Collision.collide(g[0].hitboxOnMap, g[1].hitboxOnMap)) {
+        this.collided(g[0], g[1])
+      }
+    })
+  }
+
   update(game) {
     this.gameObjects.forEach(e => e.update(game))
+    this.handle_collisions()
   }
 
   draw(game) {

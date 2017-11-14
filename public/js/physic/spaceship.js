@@ -6,6 +6,7 @@ import Polygon from '../foundation/polygon.js'
 export default class SpaceShip extends PhysicalObject {
   constructor(scene, pos, camera) {
     super(scene,pos,camera)
+    this.state = 'alive'
     this.thrusting = false
     this.firing = false
     this.firingNext = 0
@@ -34,11 +35,13 @@ export default class SpaceShip extends PhysicalObject {
 
   computeMissileStartPosition() {
     const translation = {x: this.drawbox.x / 2, y: 0}
-    return Transform.rotateAround(
+    const pos = Transform.rotateAround(
       this.centerOnMap,
       Transform.translate(this.pos, translation),
       this.pos.angle
     )
+    pos.angle = this.pos.angle
+    return pos
   }
 
   fire() {
@@ -87,6 +90,10 @@ export default class SpaceShip extends PhysicalObject {
     // color
     this.game.ctx.strokeStyle = '#ddd'
 
+    if (this.state == 'alive') this.draw_ship_normal()
+  }
+
+  draw_ship_normal() {
     // spaceship main
     this.game.ctx.beginPath()
     this.game.ctx.moveTo(15,0)

@@ -2,8 +2,6 @@ import Scene from './base_scene.js'
 import SpaceShip from '../physic/spaceship.js'
 import Missile from '../physic/missile.js'
 import Logo from '../physic/logo.js'
-import Combination from '../foundation/combination.js'
-import Collision from '../foundation/collision.js'
 
 export default class OpeningScene extends Scene {
   constructor(game) {
@@ -37,39 +35,15 @@ export default class OpeningScene extends Scene {
 
   draw() {
     super.draw()
+  }
 
-    this.cameras.following.use()
-    let h = this.ennemy.hitboxOnMap
-    this.game.ctx.fillStyle = '#00ff00'
-    this.game.ctx.beginPath()
-    this.game.ctx.moveTo(h.points[0].x, h.points[0].y)
-    this.game.ctx.lineTo(h.points[1].x, h.points[1].y)
-    this.game.ctx.lineTo(h.points[2].x, h.points[2].y)
-    this.game.ctx.closePath()
-    this.game.ctx.fill()
-
-    h = this.spaceship.hitboxOnMap
-    this.game.ctx.fillStyle = '#ff0000'
-    this.game.ctx.beginPath()
-    this.game.ctx.moveTo(h.points[0].x, h.points[0].y)
-    this.game.ctx.lineTo(h.points[1].x, h.points[1].y)
-    this.game.ctx.lineTo(h.points[2].x, h.points[2].y)
-    this.game.ctx.closePath()
-    this.game.ctx.fill()
-    this.cameras.following.done()
+  collided(o1, o2) {
+    if (o1 instanceof SpaceShip) o1.state = 'dead'
+    if (o2 instanceof SpaceShip) o2.state = 'dead'
   }
 
   update() {
     super.update()
-
-    Combination.twoByTwoOnArray(
-      this.gameObjects.filter(g => g.hitbox)
-    ).forEach(g => {
-      if (Collision.collide(g[0].hitboxOnMap, g[1].hitboxOnMap)) {
-        console.log("boum")
-      }
-    })
-
     this.cameras['following'].centerOn = this.spaceship
 
     if (this.game.keydown[38]) this.spaceship.thrust()

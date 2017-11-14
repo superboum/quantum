@@ -7,13 +7,14 @@ export default class Scene {
   constructor(game) {
     this.game = game
     this.gameObjects = []
+    this.triggers = {}
     this.cameras = {
       'hud': new BaseCamera(this.game),
       'following': new FollowingCamera(this.game)
     }
   }
 
-  handle_collisions() {
+  _handleCollisions() {
     Combination.twoByTwoOnArray(
       this.gameObjects.filter(g => g.hitbox)
     ).forEach(g => {
@@ -23,9 +24,20 @@ export default class Scene {
     })
   }
 
+  addTrigger(fn, count) {
+    const t = this.game.frames + count
+    if (!this.triggers[t])
+      this.triggers[t] = []
+    this.triggers[t].push(fn)
+  }
+
   update(game) {
     this.gameObjects.forEach(e => e.update(game))
-    this.handle_collisions()
+    this._handleCollisions()
+    if (this.triggers[this.game.frames]) {
+      this.triggers[this.game.frames].forEach(f => f())
+      delete this.triggers[this.game.frames]
+    }
   }
 
   draw(game) {

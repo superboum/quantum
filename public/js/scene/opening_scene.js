@@ -38,8 +38,15 @@ export default class OpeningScene extends Scene {
   }
 
   collided(o1, o2) {
-    if (o1 instanceof SpaceShip) o1.state = 'dead'
-    if (o2 instanceof SpaceShip) o2.state = 'dead'
+    if (o1 instanceof SpaceShip) {
+      o1.state = 'dead'
+      this.addTrigger(() => o1.state = 'alive', 60)
+    }
+
+    if (o2 instanceof SpaceShip) {
+      o2.state = 'dead'
+      this.addTrigger(() => o2.state = 'alive', 60)
+    }
   }
 
   update() {

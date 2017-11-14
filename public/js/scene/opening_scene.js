@@ -25,7 +25,11 @@ export default class OpeningScene extends Scene {
 
   addMissile(m) {
     this.missiles.push(m)
+    const position = this.gameObjects.length
     this.gameObjects.push(m)
+    this.addTrigger(() => {
+      this.gameObjects.splice(position)
+    }, this.game.fps * 3)
   }
 
   sound() {
@@ -40,12 +44,10 @@ export default class OpeningScene extends Scene {
   collided(o1, o2) {
     if (o1 instanceof SpaceShip) {
       o1.state = 'dead'
-      this.addTrigger(() => o1.state = 'alive', 60)
     }
 
     if (o2 instanceof SpaceShip) {
       o2.state = 'dead'
-      this.addTrigger(() => o2.state = 'alive', 60)
     }
   }
 

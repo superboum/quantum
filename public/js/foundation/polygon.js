@@ -1,3 +1,5 @@
+import Vector from './vector.js'
+
 export default class Polygon {
   constructor(points) {
     this.points = points
@@ -9,9 +11,9 @@ export default class Polygon {
     const shiftedPoints = this.points.slice(0)
     shiftedPoints.push(shiftedPoints.shift())
 
-    return zip(this.points, shiftedPoints).map(e => new Object({
-      x: e[1].x - e[0].x,
-      y: e[1].y - e[0].y
-    }))
+    return zip(this.points, shiftedPoints).map(e => new Vector(
+      e[1].x - e[0].x,
+      e[1].y - e[0].y
+    ))
   }
 }

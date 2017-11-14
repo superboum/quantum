@@ -1,4 +1,4 @@
-class Vector {
+export default class Vector {
   constructor(x, y) {
     this.x = x
     this.y = y
@@ -7,7 +7,7 @@ class Vector {
   normalize() {
     const l = this.length()
     this.x /= l
-    this.y /= la
+    this.y /= l
     return this
   }
 

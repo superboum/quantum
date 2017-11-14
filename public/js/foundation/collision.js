@@ -1,12 +1,12 @@
-class Collision {
+export default class Collision {
   static projectPolygon(axis, p) {
     const initDotProduct = axis.dotProduct(p.points[0])
 
     return p.points.reduce(
       (acc, p) => {
         const dotProduct = axis.dotProduct(p)
-        if (dotProduct < min) acc.min = dotProduct
-        else if (dotProduct > max) acc.max = dotProduct
+        if (dotProduct < acc.min) acc.min = dotProduct
+        else if (dotProduct > acc.max) acc.max = dotProduct
         return acc
       },
       {

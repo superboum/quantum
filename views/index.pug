@@ -4,12 +4,14 @@ html
     title Quantum
     link(rel="stylesheet", href="/css/main.css")
   body
+    #warning
+      h1 Please wait
+      p If it takes too long, your browser might not be supported.
+      p If you use firefox, type "about:config" in your address bar and switch "dom.moduleScripts.enabled" to true.
+      p If you use Edge, you must activate it in the experimental javascript features preference pane.
+      p If you use Chrome, Safari or Opera, it should natively work. If it doesn't, please upgrade to the latest version.
+      p If you use Internet Explorer, I can't do anything for you.
     canvas#game(width="800",height="600",moz-opaque=true)
-    //-div
-      //-button(onclick="start()") Connect
-    //-div
-      //-video#remoteVideo(autoplay=true)
-      //-video#localVideo(autoplay=true)
 
     script(src="/socket.io/socket.io.js")
     script(type="module", src="/js/main.js")

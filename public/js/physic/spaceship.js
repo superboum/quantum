@@ -20,16 +20,31 @@ export default class SpaceShip extends PhysicalObject {
     ])
   }
 
+  destroy() {
+    this.hitbox = null
+    this.state = 'dying'
+    this.dyingStart = this.game.frames
+
+    this.scene.addTrigger(() => {
+      this.state = 'dead'
+      this.accel = {x: 0, y: 0}
+      this.speed = {x: 0, y: 0}
+    }, this.game.fps * 2)
+  }
+
   thrust() {
+    if (this.state != 'alive') return
     this.accel = Transform.projection(this.pos.angle + this.shiftAngle, 200)
     this.thrusting = true
   }
 
   rotateRight() {
+    if (this.state != 'alive') return
     this.pos.angle = (this.pos.angle + 0.1) % (Math.PI * 2)
   }
 
   rotateLeft() {
+    if (this.state != 'alive') return
     this.pos.angle = (this.pos.angle - 0.1) % (Math.PI * 2)
   }
 
@@ -45,6 +60,7 @@ export default class SpaceShip extends PhysicalObject {
   }
 
   fire() {
+    if (this.state != 'alive') return
     if (this.firingNext > this.game.frames) return
     this.firingNext = this.game.frames + this.game.fps * 0.4
     const m = new Missile(
@@ -91,6 +107,26 @@ export default class SpaceShip extends PhysicalObject {
     this.game.ctx.strokeStyle = '#ddd'
 
     if (this.state == 'alive') this.draw_ship_normal()
+    else if (this.state == 'dying') this.draw_ship_dying()
+  }
+
+  draw_ship_dying() {
+    const delta = this.game.frames - this.dyingStart
+    this.game.ctx.beginPath()
+    this.game.ctx.moveTo(15-delta,0-delta)
+    this.game.ctx.lineTo(30-delta,40-delta)
+    this.game.ctx.stroke()
+
+    this.game.ctx.beginPath()
+    this.game.ctx.moveTo(30,40)
+    this.game.ctx.lineTo(0,40)
+    this.game.ctx.stroke()
+
+    this.game.ctx.beginPath()
+    this.game.ctx.moveTo(15+delta,0-delta)
+    this.game.ctx.lineTo(0+delta,40-delta)
+    this.game.ctx.stroke()
+
   }
 
   draw_ship_normal() {

@@ -1,4 +1,7 @@
-class Scene {
+import BaseCamera from '../camera/following_camera.js'
+import FollowingCamera from '../camera/following_camera.js'
+
+export default class Scene {
   constructor(game) {
     this.game = game
     this.gameObjects = []

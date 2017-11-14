@@ -1,4 +1,7 @@
-class Game {
+import AudioManager from './audio_manager.js'
+import OpeningScene from './scene/opening_scene.js'
+
+export default class Game {
   constructor(canvasId) {
     this.canvas = document.getElementById(canvasId)
     if (!this.canvas.getContext) throw "Unable to get context"

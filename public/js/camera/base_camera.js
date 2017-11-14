@@ -1,4 +1,4 @@
-class BaseCamera {
+export default class BaseCamera {
   constructor(game) {
     this.game = game
   }

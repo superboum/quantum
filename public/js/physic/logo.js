@@ -1,4 +1,6 @@
-class Logo extends PhysicalObject {
+import PhysicalObject from './physical_object.js'
+
+export default class Logo extends PhysicalObject {
   constructor(scene, camera) {
     super(scene, {x: 200, y: 200, angle: 0}, camera)
     this.toPrint = 0

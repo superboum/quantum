@@ -12,18 +12,4 @@ html
       //-video#localVideo(autoplay=true)
 
     script(src="/socket.io/socket.io.js")
-
-    script(src="/js/foundation/transform.js")
-    script(src="/js/physic/physical_object.js")
-    script(src="/js/physic/missile.js")
-    script(src="/js/physic/logo.js")
-    script(src="/js/physic/spaceship.js")
-    script(src="/js/scene/base_scene.js")
-    script(src="/js/scene/opening_scene.js")
-    script(src="/js/camera/base_camera.js")
-    script(src="/js/camera/following_camera.js")
-    script(src="/js/audio_manager.js")
-    script(src="/js/game.js")
-    script.
-      const g = new Game('game')
-      g.run()
+    script(type="module", src="/js/main.js")

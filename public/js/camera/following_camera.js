@@ -1,4 +1,6 @@
-class FollowingCamera extends BaseCamera {
+import BaseCamera from './base_camera.js'
+
+export default class FollowingCamera extends BaseCamera {
   constructor(game) {
     super(game)
     this.centerOn = null

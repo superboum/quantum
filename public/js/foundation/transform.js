@@ -1,4 +1,4 @@
-class Transform {
+export default class Transform {
   static translate(pos, delta) {
     return {
       x: pos.x + delta.x,

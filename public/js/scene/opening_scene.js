@@ -1,4 +1,9 @@
-class OpeningScene extends Scene {
+import Scene from './base_scene.js'
+import SpaceShip from '../physic/spaceship.js'
+import Missile from '../physic/missile.js'
+import Logo from '../physic/logo.js'
+
+export default class OpeningScene extends Scene {
   constructor(game) {
     super(game)
     this.spaceship = new SpaceShip(

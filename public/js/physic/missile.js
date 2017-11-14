@@ -1,4 +1,6 @@
-class Missile extends PhysicalObject {
+import PhysicalObject from './physical_object.js'
+
+export default class Missile extends PhysicalObject {
   constructor(scene, pos, camera, createdBy) {
     super(scene, pos, camera)
     this.radius = 2

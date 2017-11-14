@@ -1,4 +1,4 @@
-class AudioManager {
+export default class AudioManager {
 
   constructor() {
     const toLoad = ['key.mp3', 'fire.wav', 'thrust.wav']

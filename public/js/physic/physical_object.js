@@ -1,4 +1,4 @@
-class PhysicalObject {
+export default class PhysicalObject {
   constructor(scene, pos, camera) {
     this.game = scene.game
     this.scene = scene

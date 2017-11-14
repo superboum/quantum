@@ -1,4 +1,8 @@
-class SpaceShip extends PhysicalObject {
+import PhysicalObject from './physical_object.js'
+import Missile from './missile.js'
+import Transform from '../foundation/transform.js'
+
+export default class SpaceShip extends PhysicalObject {
   constructor(scene, pos, camera) {
     super(scene,pos,camera)
     this.thrusting = false

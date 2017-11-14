@@ -1,6 +1,8 @@
 class Missile extends PhysicalObject {
-  constructor(scene, pos, camera) {
+  constructor(scene, pos, camera, createdBy) {
     super(scene, pos, camera)
+    this.radius = 2
+    this.createdBy = createdBy
   }
 
   draw() {
@@ -10,7 +12,7 @@ class Missile extends PhysicalObject {
     this.game.ctx.arc(
       this.pos.x,
       this.pos.y,
-      2,
+      this.radius,
       0,
       Math.PI * 2
     )

@@ -37,7 +37,8 @@ class SpaceShip extends PhysicalObject {
     const m = new Missile(
       this.scene,
       this.computeMissileStartPosition(),
-      this.camera
+      this.camera,
+      this
     )
 
     m.speed = Transform.projection(this.pos.angle + this.shiftAngle, 200)

@@ -6,9 +6,16 @@ class OpeningScene extends Scene {
       {x: 100, y: 100, angle: Math.PI * 3/4},
       'following'
     )
+
+    this.ennemy = new SpaceShip(
+      this,
+      {x: 300, y: 100, angle: Math.PI * 1/4},
+      'following'
+    )
+
     this.logo = new Logo(this, 'following');
     this.missiles = []
-    this.gameObjects = [this.logo, this.spaceship]
+    this.gameObjects = [this.logo, this.spaceship, this.ennemy]
   }
 
   addMissile(m) {
@@ -31,5 +38,8 @@ class OpeningScene extends Scene {
     else if (this.game.keydown[37]) this.spaceship.rotateLeft()
 
     if (this.game.keydown[32]) this.spaceship.fire()
+
+    this.ennemy.thrust()
+    this.ennemy.rotateLeft()
   }
 }

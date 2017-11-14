@@ -2,6 +2,8 @@ import Scene from './base_scene.js'
 import SpaceShip from '../physic/spaceship.js'
 import Missile from '../physic/missile.js'
 import Logo from '../physic/logo.js'
+import Combination from '../foundation/combination.js'
+import Collision from '../foundation/collision.js'
 
 export default class OpeningScene extends Scene {
   constructor(game) {
@@ -59,6 +61,15 @@ export default class OpeningScene extends Scene {
 
   update() {
     super.update()
+
+    Combination.twoByTwoOnArray(
+      this.gameObjects.filter(g => g.hitbox)
+    ).forEach(g => {
+      if (Collision.collide(g[0].hitboxOnMap, g[1].hitboxOnMap)) {
+        console.log("boum")
+      }
+    })
+
     this.cameras['following'].centerOn = this.spaceship
 
     if (this.game.keydown[38]) this.spaceship.thrust()

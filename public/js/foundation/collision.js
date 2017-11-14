@@ -1,3 +1,11 @@
+/*
+ * Collision
+ *
+ * Based on the Separating Axis Theorem applied to convex polygons
+ * Some resources:
+ *  - https://www.codeproject.com/Articles/15573/2D-Polygon-Collision-Detection
+ *  - https://gamedevelopment.tutsplus.com/tutorials/collision-detection-using-the-separating-axis-theorem--gamedev-169
+ */
 export default class Collision {
   static projectPolygon(axis, p) {
     const initDotProduct = axis.dotProduct(p.points[0])

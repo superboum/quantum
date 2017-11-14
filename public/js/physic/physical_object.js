@@ -6,6 +6,23 @@ export default class PhysicalObject {
     this.speed = {x: 0, y: 0}
     this.accel = {x: 0, y: 0}
     this.camera = camera
+    this.hitbox = null
+    this.center = null
+  }
+
+  get centerOnMap() {
+    if (!this.center) return null
+      return {
+        x: this.pos.x + this.center.x,
+        y: this.pos.y + this.center.y
+      }
+  }
+
+  get hitboxOnMap() {
+    if (!this.hitbox || !this.center) return null
+    return this.hitbox
+      .translate(this.pos)
+      .rotateAround(this.centerOnMap, this.pos.angle)
   }
 
   update() {

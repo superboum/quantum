@@ -1,4 +1,5 @@
 import Vector from './vector.js'
+import Transform from './transform.js'
 
 export default class Polygon {
   constructor(points) {
@@ -15,5 +16,15 @@ export default class Polygon {
       e[1].x - e[0].x,
       e[1].y - e[0].y
     ))
+  }
+
+  translate(v) {
+    const newPoints = this.points.map(p => Transform.translate(p, v))
+    return new Polygon(newPoints)
+  }
+
+  rotateAround(center, angle) {
+    const newPoints = this.points.map(p => Transform.rotateAround(center, p, angle))
+    return new Polygon(newPoints)
   }
 }

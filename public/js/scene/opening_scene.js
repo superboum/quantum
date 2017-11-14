@@ -33,6 +33,30 @@ export default class OpeningScene extends Scene {
     this.spaceship.sound()
   }
 
+  draw() {
+    super.draw()
+
+    this.cameras.following.use()
+    let h = this.ennemy.hitboxOnMap
+    this.game.ctx.fillStyle = '#00ff00'
+    this.game.ctx.beginPath()
+    this.game.ctx.moveTo(h.points[0].x, h.points[0].y)
+    this.game.ctx.lineTo(h.points[1].x, h.points[1].y)
+    this.game.ctx.lineTo(h.points[2].x, h.points[2].y)
+    this.game.ctx.closePath()
+    this.game.ctx.fill()
+
+    h = this.spaceship.hitboxOnMap
+    this.game.ctx.fillStyle = '#ff0000'
+    this.game.ctx.beginPath()
+    this.game.ctx.moveTo(h.points[0].x, h.points[0].y)
+    this.game.ctx.lineTo(h.points[1].x, h.points[1].y)
+    this.game.ctx.lineTo(h.points[2].x, h.points[2].y)
+    this.game.ctx.closePath()
+    this.game.ctx.fill()
+    this.cameras.following.done()
+  }
+
   update() {
     super.update()
     this.cameras['following'].centerOn = this.spaceship

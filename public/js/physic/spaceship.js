@@ -1,6 +1,7 @@
 import PhysicalObject from './physical_object.js'
 import Missile from './missile.js'
 import Transform from '../foundation/transform.js'
+import Polygon from '../foundation/polygon.js'
 
 export default class SpaceShip extends PhysicalObject {
   constructor(scene, pos, camera) {
@@ -8,9 +9,14 @@ export default class SpaceShip extends PhysicalObject {
     this.thrusting = false
     this.firing = false
     this.firingNext = 0
-    this.hitbox = {x: 30, y: 40}
-    this.center = {x: this.hitbox.x / 2, y: this.hitbox.y / 2}
+    this.drawbox = {x: 30, y: 40}
+    this.center = {x: this.drawbox.x / 2, y: this.drawbox.y / 2}
     this.shiftAngle = -Math.PI / 2
+    this.hitbox = new Polygon([
+      {x: 15, y:  0},
+      {x: 30, y: 40},
+      {x:  0, y: 40}
+    ])
   }
 
   thrust() {
@@ -27,9 +33,9 @@ export default class SpaceShip extends PhysicalObject {
   }
 
   computeMissileStartPosition() {
-    const translation = {x: this.hitbox.x / 2, y: 0}
+    const translation = {x: this.drawbox.x / 2, y: 0}
     return Transform.rotateAround(
-      {x: this.pos.x + this.center.x, y: this.pos.y + this.center.y },
+      this.centerOnMap,
       Transform.translate(this.pos, translation),
       this.pos.angle
     )

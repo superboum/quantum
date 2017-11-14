@@ -24,6 +24,7 @@ export default class SpaceShip extends PhysicalObject {
     this.hitbox = null
     this.state = 'dying'
     this.dyingStart = this.game.frames
+    this.game.sounds.playParallel("bangLarge.wav")
 
     this.scene.addTrigger(() => {
       this.state = 'dead'

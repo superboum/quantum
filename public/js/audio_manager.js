@@ -1,7 +1,7 @@
 export default class AudioManager {
 
   constructor() {
-    const toLoad = ['key.mp3', 'fire.wav', 'thrust.wav']
+    const toLoad = ['key.mp3', 'fire.wav', 'thrust.wav', 'bangLarge.wav']
 
     this.sounds = toLoad.reduce((acc, cur) => {
       acc[cur] = new Audio("/sound/"+cur)

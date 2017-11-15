@@ -1,10 +1,13 @@
 import Scene from './base_scene.js'
 import Typewriter from '../physic/typewriter.js'
+import Network from '../foundation/network.js'
 
 export default class OpeningScene extends Scene {
   constructor(game) {
     super(game)
-    this.position = new Typewriter(
+    this.myCode = null
+    this.net = new Network()
+    this.location = new Typewriter(
       this,
       {
         x: game.canvas.width / 2,
@@ -12,7 +15,7 @@ export default class OpeningScene extends Scene {
         angle: 0
       },
       {
-        text: 'Cap\'n, this is our current position: F532ED',
+        text: 'Cap\'n, this is our current position: ',
         speed: 0.1,
         font: '30px Hyperspace',
       },
@@ -34,17 +37,25 @@ export default class OpeningScene extends Scene {
       'hud'
     )
 
-    this.position.onEnded(
+    this.location.onEnded(
       () => this.addTrigger(
         () => this.gameObjects.push(this.choice), this.game.fps*1
     ))
 
-    this.gameObjects = [this.position]
+    this.gameObjects = []
     this.characters = [
       '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-      'A', 'B', 'C', 'D', 'E', 'F', '_'
+      'a', 'b', 'c', 'd', 'e', 'f', '_'
     ]
     this.cursor = -6
+
+    this.net.getLocation().then((data) => {
+      this.location.config.text += data.code
+      this.myCode = data.code
+      this.gameObjects.push(this.location)
+    })
+
+    this.net.onReady(() => console.log("ready"))
   }
 
   _enter_destination(inc) {
@@ -62,8 +73,8 @@ export default class OpeningScene extends Scene {
   _connect() {
     const c = this.choice.config
     const i = c.text.length - 6
-    console.log(c.text.substr(i))
-    this.end()
+    const targetCode = c.text.substr(i)
+    this.net.init(true, this.myCode, targetCode)
   }
 
   update() {

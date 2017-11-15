@@ -123,6 +123,24 @@ export default class SpaceShip extends PhysicalObject {
       this['draw_ship_'+this.state.state]()
   }
 
+  serialize() {
+    return {
+      pos: this.pos,
+      firing: this.firing,
+      thrusting: this.thrusting,
+    }
+  }
+
+  static deserializeAndCreate(scene, elem, camera) {
+    const s = new SpaceShip(scene, {x:0, y:0, angle: 0}, camera)
+    s.deserialize(elem)
+    return s
+  }
+
+  deserialize(elem) {
+    Object.assign(this, elem)
+  }
+
   draw_ship_exploding() {
     const delta = this.game.frames - this.dyingStart
     this.game.ctx.beginPath()

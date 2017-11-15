@@ -43,10 +43,10 @@ export default class Game {
         },
         toLobby: () => {
           this.scene = new LobbyScene(this)
-          this.scene.onEnded(() => this.state.transition('play'))
+          this.scene.onEnded((net) => this.state.transition('play', net))
         },
-        play: () => {
-          this.scene = new FightScene(this)
+        play: (net) => {
+          this.scene = new FightScene(this, net)
           this.scene.onEnded(() => this.state.transition('restart'))
         },
         restart: () => {

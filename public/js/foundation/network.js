@@ -8,12 +8,18 @@ export default class Network {
     this.channel
     this.callReady = []
     this.callMessage = []
-
+    this.initiator = null
+    this.from
+    this.to
     this.waitRTCConnection()
   }
 
   init(initiator, from, to) {
     if (this.pc) return
+
+    this.initiator = initiator
+    this.from = from
+    this.to = to
 
     this.pc = new RTCPeerConnection(this.configuration)
     this.pc.onicecandidate = evt => this.socket.emit(
@@ -44,7 +50,9 @@ export default class Network {
 
   setup() {
     this.channel.onopen = () => this.callReady.forEach(f => f())
-    this.channel.onmessage = evt => this.callMessage.forEach(f => f(evt))
+    this.channel.onmessage = evt => this.callMessage.forEach(
+      f => f(JSON.parse(evt.data))
+    )
   }
 
   onReady(fn) {
@@ -53,6 +61,10 @@ export default class Network {
 
   onMessage(fn) {
     this.callMessage.push(fn)
+  }
+
+  send(msg) {
+    this.channel.send(JSON.stringify(msg))
   }
 
   waitRTCConnection() {

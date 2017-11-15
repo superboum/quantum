@@ -55,7 +55,7 @@ export default class OpeningScene extends Scene {
       this.gameObjects.push(this.location)
     })
 
-    this.net.onReady(() => console.log("ready"))
+    this.net.onReady(() => this.end(this.net))
   }
 
   _enter_destination(inc) {

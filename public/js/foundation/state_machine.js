@@ -27,12 +27,12 @@ export default class StateMachine {
     this.methods = params.methods
   }
 
-  transition(name) {
+  transition(name, params) {
     const t = this.transitions.find(e => e.name == name)
     if (!t || t.from != this.state) return false
     if (!this.methods[name]) return false
     this.state = t.to
-    this.methods[t.name]()
+    this.methods[t.name](params)
     return true
   }
 

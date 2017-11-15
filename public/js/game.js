@@ -1,6 +1,7 @@
 import StateMachine from './foundation/state_machine.js'
 import AudioManager from './audio_manager.js'
 import OpeningScene from './scene/opening_scene.js'
+import LobbyScene from './scene/lobby_scene.js'
 import FightScene from './scene/fight_scene.js'
 
 export default class Game {
@@ -13,23 +14,35 @@ export default class Game {
     this.frames = 0
     this.sounds = new AudioManager()
     this.keydown = {}
+    this.justkeydown = {}
     this.scene = null
 
     this.resize()
     window.addEventListener('resize', () => this.resize(), false)
-    window.addEventListener('keydown', e => this.keydown[e.keyCode] = true, false)
-    window.addEventListener('keyup', e => this.keydown[e.keyCode] = false, false)
+    window.addEventListener('keydown', e => {
+      this.justkeydown[e.keyCode] = true
+      this.keydown[e.keyCode] = true
+    }, false)
+    window.addEventListener('keyup', e => {
+      this.keydown[e.keyCode] = false
+      this.justkeydown[e.keyCode] = false
+    }, false)
 
     this.state = new StateMachine({
       init: 'nothing',
       transitions: [
         { name: 'start', from: 'nothing', to: 'opening'},
-        { name: 'play', from: 'opening', to: 'game'},
+        { name: 'toLobby', from: 'opening', to: 'lobby'},
+        { name: 'play', from: 'lobby', to: 'game'},
         { name: 'restart', from: 'game', to: 'opening'}
       ],
       methods: {
         start: () => {
           this.scene = new OpeningScene(this)
+          this.scene.onEnded(() => this.state.transition('toLobby'))
+        },
+        toLobby: () => {
+          this.scene = new LobbyScene(this)
           this.scene.onEnded(() => this.state.transition('play'))
         },
         play: () => {
@@ -38,7 +51,7 @@ export default class Game {
         },
         restart: () => {
           this.scene = new OpeningScene(this)
-          this.scene.onEnded(() => this.state.transition('play'))
+          this.scene.onEnded(() => this.state.transition('toLobby'))
         }
       }
     })
@@ -57,6 +70,9 @@ export default class Game {
       this.scene.update()
       this.scene.sound()
       this.scene.draw()
+      Object.keys(this.justkeydown).forEach(k => {
+        this.justkeydown[k] = false
+      })
     }, 1000/this.fps)
   }
 }

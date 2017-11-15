@@ -48,14 +48,13 @@ export default class Polygon {
     angleSteps = angleSteps.map(as => as / k)
 
     // now generate the points
-    let points = []
     let angle = Random.uniform(0, 2 * Math.PI)
-    angleSteps.forEach(as => {
+    let points = angleSteps.map(as => {
       let r_i = clip(Random.gauss(aveRadius, spikeyness), 0, 2 * aveRadius)
       let vx = center.x + r_i * Math.cos(angle)
       let vy = center.y + r_i * Math.sin(angle)
-      points.push({x: Math.floor(vx), y: Math.floor(vy)})
       angle += as
+      return {x: Math.floor(vx), y: Math.floor(vy)}
     })
 
     return new Polygon(points)

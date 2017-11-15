@@ -43,9 +43,13 @@ export default class FightScene extends Scene {
       )
       this.gameObjects = [this.mine, this.yours]
       this.gameObjects = this.gameObjects.concat(this.asteroids)
-      console.log(this.asteroids)
     } else if (msg.cmd == 'updt') {
       this.yours.deserialize(msg.mine)
+      this.gameObjects = this.gameObjects
+        .filter(g => !(g instanceof Missile) || g.local)
+        .concat(msg.my_missiles
+          .map(m => Missile.deserializeAndCreate(this,m,'following'))
+        )
     }
   }
 
@@ -53,7 +57,11 @@ export default class FightScene extends Scene {
     return [
       {x: 0, y: 0, angle: Math.PI / 2},
       {x: 300, y: 0, angle: -Math.PI / 2}
-    ].map(p => new SpaceShip(this, p, 'following'))
+    ].map((p, i) => {
+      let s = new SpaceShip(this, p, 'following')
+      s.id = i
+      return s
+    })
   }
 
   _generate_asteroids() {
@@ -72,15 +80,17 @@ export default class FightScene extends Scene {
     if (!(this.mine && this.yours && this.asteroids)) return
 
     if (this.game.keydown[38]) this.mine.thrust()
-
     if (this.game.keydown[39]) this.mine.rotateRight()
     else if (this.game.keydown[37]) this.mine.rotateLeft()
-
     if (this.game.keydown[32]) this.mine.fire()
 
-    //this.ennemy.thrust()
-    //this.ennemy.rotateLeft()
-    this.net.send({cmd: 'updt', mine: this.mine.serialize() })
+    this.net.send({
+      cmd: 'updt',
+      mine: this.mine.serialize(),
+      my_missiles: this.gameObjects
+        .filter(g => g instanceof Missile && g.local)
+        .map(m => m.serialize())
+    })
   }
 
   addMissile(m) {
@@ -96,8 +106,8 @@ export default class FightScene extends Scene {
   collided(o1, o2) {
     const objs = [o1, o2]
     objs.forEach((o, i) => {
-      let other = objs[i+1%2]
-      if (o instanceof SpaceShip) o.state.transition('hit')
+      let other = objs[i == 0 ? 1 : 0]
+      if (o instanceof SpaceShip && other.createdBy != o.id) o.state.transition('hit')
       if (o instanceof Missile) this.removeMissile(o)
     })
   }

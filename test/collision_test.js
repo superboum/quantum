@@ -3,7 +3,7 @@ import Polygon from '../public/js/foundation/polygon.js'
 import { assert } from 'chai'
 
 describe('Collision', () => {
-  describe('#collide', () => {
+  describe('#collide()', () => {
     it('should collide', () => {
       const p1 = new Polygon([
         {x: 0, y: 0},

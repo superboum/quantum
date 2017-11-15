@@ -39,19 +39,19 @@ export default class FightScene extends Scene {
 
   addMissile(m) {
     this.gameObjects.push(m)
-    this.addTrigger(() => {
-      const position = this.gameObjects.indexOf(m)
-      this.gameObjects.splice(position, 1)
-    }, this.game.fps * 3)
+    this.addTrigger(() => this.removeMissile(m), this.game.fps * 3)
+  }
+
+  removeMissile(m) {
+    const position = this.gameObjects.indexOf(m)
+    position == -1 || this.gameObjects.splice(position, 1)
   }
 
   collided(o1, o2) {
-    if (o1 instanceof SpaceShip) {
-      o1.state.transition('hit')
-    }
-
-    if (o2 instanceof SpaceShip) {
-      o2.state.transition('hit')
-    }
+    const objs = [o1, o2]
+    objs.forEach(o => {
+      if (o instanceof SpaceShip) o.state.transition('hit')
+      if (o instanceof Missile) this.removeMissile(o)
+    })
   }
 }

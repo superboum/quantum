@@ -109,7 +109,7 @@ export default class SpaceShip extends PhysicalObject {
   }
 
   sound() {
-    if (this.thrusting)
+    //if (this.thrusting)
       //this.game.sounds.playParallel("thrust.wav")
     if (this.firing)
       this.game.sounds.playParallel("fire.wav")

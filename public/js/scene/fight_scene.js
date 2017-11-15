@@ -58,8 +58,9 @@ export default class FightScene extends Scene {
 
   collided(o1, o2) {
     const objs = [o1, o2]
-    objs.forEach(o => {
-      if (o instanceof SpaceShip) o.state.transition('hit')
+    objs.forEach((o, i) => {
+      let other = objs[i+1%2]
+      if (o instanceof SpaceShip && other.createdBy != o) o.state.transition('hit')
       if (o instanceof Missile) this.removeMissile(o)
     })
   }

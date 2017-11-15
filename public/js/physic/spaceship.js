@@ -92,7 +92,9 @@ export default class SpaceShip extends PhysicalObject {
       this
     )
 
-    m.speed = Transform.projection(this.pos.angle + this.shiftAngle, 200)
+    const faster = Transform.projection(this.pos.angle + this.shiftAngle, 300)
+    m.speed.x = this.speed.x + faster.x
+    m.speed.y = this.speed.y + faster.y
 
     this.scene.addMissile(m)
     this.firing = true

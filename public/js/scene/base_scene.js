@@ -8,6 +8,7 @@ export default class Scene {
     this.game = game
     this.gameObjects = []
     this.triggers = {}
+    this.callOnEnded = []
     this.cameras = {
       'hud': new BaseCamera(this.game),
       'following': new FollowingCamera(this.game)
@@ -24,6 +25,8 @@ export default class Scene {
       }
     })
   }
+
+  collided(o1, o2) {}
 
   addTrigger(fn, count) {
     const t = this.game.frames + count
@@ -56,6 +59,14 @@ export default class Scene {
     this.gameObjects.forEach(e => e.sound(game))
   }
 
-  keydown(game, e) {
+  keydown(game, e) { }
+
+  end(params) {
+    this.callOnEnded.forEach(f => f(params))
   }
+
+  onEnded(fn) {
+    this.callOnEnded.push(fn)
+  }
+
 }

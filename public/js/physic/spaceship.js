@@ -10,6 +10,7 @@ export default class SpaceShip extends PhysicalObject {
     this.thrusting = false
     this.firing = false
     this.firingNext = 0
+    this.callOnGone = []
     this.drawbox = {x: 30, y: 40}
     this.center = {x: this.drawbox.x / 2, y: this.drawbox.y / 2}
     this.shiftAngle = -Math.PI / 2
@@ -35,6 +36,8 @@ export default class SpaceShip extends PhysicalObject {
     })
   }
 
+  onGone(fn) { this.callOnGone.push(fn) }
+
   hit() {
     this.hitbox = null
     this.dyingStart = this.game.frames
@@ -45,6 +48,7 @@ export default class SpaceShip extends PhysicalObject {
   gone() {
     this.accel = {x: 0, y: 0}
     this.speed = {x: 0, y: 0}
+    this.callOnGone.forEach(f => f())
   }
 
   one_up() {
@@ -106,7 +110,7 @@ export default class SpaceShip extends PhysicalObject {
 
   sound() {
     if (this.thrusting)
-      this.game.sounds.playParallel("thrust.wav")
+      //this.game.sounds.playParallel("thrust.wav")
     if (this.firing)
       this.game.sounds.playParallel("fire.wav")
   }

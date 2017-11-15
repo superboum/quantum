@@ -2,18 +2,25 @@ import PhysicalObject from './physical_object.js'
 
 export default class Logo extends PhysicalObject {
   constructor(scene, camera) {
-    super(scene, {x: 200, y: 200, angle: 0}, camera)
+    super(
+      scene, {
+        x: scene.game.canvas.width / 2,
+        y: scene.game.canvas.height / 2,
+        angle: 0
+      }, camera
+    )
     this.toPrint = 0
     this.lastPrint = 0
     this.keySound = false
     this.textToPrint = 'Quantum'
+    this.startFrame = this.game.frames
   }
 
   update() {
     this.keySound = false
     this.toPrint = Math.floor(
       Math.min(
-        this.game.frames / this.game.fps / 0.2,
+        (this.game.frames - this.startFrame) / this.game.fps / 0.2,
         this.textToPrint.length
     ))
 

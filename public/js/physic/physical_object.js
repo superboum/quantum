@@ -35,5 +35,17 @@ export default class PhysicalObject {
 
   sound() {}
 
-  draw() {}
+  draw() {
+    // 30px width || 43 px height
+    // translation
+    this.game.ctx.translate(this.pos.x, this.pos.y)
+
+    // rotation
+    this.game.ctx.translate(this.center.x, this.center.y)
+    this.game.ctx.rotate(this.pos.angle)
+    this.game.ctx.translate(-this.center.x, -this.center.y)
+
+    // color
+    this.game.ctx.strokeStyle = '#ddd'
+  }
 }

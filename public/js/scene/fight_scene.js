@@ -2,6 +2,7 @@ import Scene from './base_scene.js'
 import SpaceShip from '../physic/spaceship.js'
 import Missile from '../physic/missile.js'
 import Asteroid from '../physic/asteroid.js'
+import Random from '../foundation/random.js'
 
 export default class FightScene extends Scene {
   constructor(game) {
@@ -20,11 +21,14 @@ export default class FightScene extends Scene {
     )
 
     this.gameObjects = [this.spaceship, this.ennemy]
-    this.gameObjects.push(new Asteroid(
-      this,
-      {x: -200, y: 0, angle: 0},
-      'following'
-    ))
+    for (let i = 0; i < 10; i++) {
+      this.gameObjects.push(new Asteroid(
+        this,
+        {x: Random.uniform(-800,800), y: Random.uniform(-400,400), angle: 0},
+        Random.uniform(15,40),
+        'following'
+      ))
+    }
   }
 
   update() {

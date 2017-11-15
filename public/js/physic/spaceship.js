@@ -116,18 +116,7 @@ export default class SpaceShip extends PhysicalObject {
   }
 
   draw() {
-    // 30px width || 43 px height
-    // translation
-    this.game.ctx.translate(this.pos.x, this.pos.y)
-
-    // rotation
-    this.game.ctx.translate(this.center.x, this.center.y)
-    this.game.ctx.rotate(this.pos.angle)
-    this.game.ctx.translate(-this.center.x, -this.center.y)
-
-    // color
-    this.game.ctx.strokeStyle = '#ddd'
-
+    super.draw()
     if(this['draw_ship_'+this.state.state])
       this['draw_ship_'+this.state.state]()
   }

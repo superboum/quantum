@@ -2,50 +2,67 @@ import PhysicalObject from './physical_object.js'
 import Missile from './missile.js'
 import Transform from '../foundation/transform.js'
 import Polygon from '../foundation/polygon.js'
+import StateMachine from '../foundation/state_machine.js'
 
 export default class SpaceShip extends PhysicalObject {
   constructor(scene, pos, camera) {
     super(scene,pos,camera)
-    this.state = 'alive'
     this.thrusting = false
     this.firing = false
     this.firingNext = 0
     this.drawbox = {x: 30, y: 40}
     this.center = {x: this.drawbox.x / 2, y: this.drawbox.y / 2}
     this.shiftAngle = -Math.PI / 2
+
     this.hitbox = new Polygon([
       {x: 15, y:  0},
       {x: 30, y: 40},
       {x:  0, y: 40}
     ])
+
+    this.state = new StateMachine({
+      init: 'alive',
+      transitions: [
+        { name: 'hit', from: 'alive', to: 'exploding' },
+        { name: 'gone', from: 'exploding', to: 'dead' },
+        { name: 'one_up', from: 'dead', to: 'alive' }
+      ],
+      methods: {
+        hit: () => this.hit(),
+        gone: () => this.gone(),
+        one_up: () => this.one_up()
+      }
+    })
   }
 
-  destroy() {
+  hit() {
     this.hitbox = null
-    this.state = 'dying'
     this.dyingStart = this.game.frames
     this.game.sounds.playParallel("bangLarge.wav")
+    this.scene.addTrigger(() => this.state.transition('gone'), this.game.fps * 2)
+  }
 
-    this.scene.addTrigger(() => {
-      this.state = 'dead'
-      this.accel = {x: 0, y: 0}
-      this.speed = {x: 0, y: 0}
-    }, this.game.fps * 2)
+  gone() {
+    this.accel = {x: 0, y: 0}
+    this.speed = {x: 0, y: 0}
+  }
+
+  one_up() {
   }
 
   thrust() {
-    if (this.state != 'alive') return
+    if (!this.state.is('alive')) return
     this.accel = Transform.projection(this.pos.angle + this.shiftAngle, 200)
     this.thrusting = true
   }
 
   rotateRight() {
-    if (this.state != 'alive') return
+    if (!this.state.is('alive')) return
     this.pos.angle = (this.pos.angle + 0.1) % (Math.PI * 2)
   }
 
   rotateLeft() {
-    if (this.state != 'alive') return
+    if (!this.state.is('alive')) return
     this.pos.angle = (this.pos.angle - 0.1) % (Math.PI * 2)
   }
 
@@ -61,7 +78,7 @@ export default class SpaceShip extends PhysicalObject {
   }
 
   fire() {
-    if (this.state != 'alive') return
+    if (!this.state.is('alive')) return
     if (this.firingNext > this.game.frames) return
     this.firingNext = this.game.frames + this.game.fps * 0.4
     const m = new Missile(
@@ -107,11 +124,11 @@ export default class SpaceShip extends PhysicalObject {
     // color
     this.game.ctx.strokeStyle = '#ddd'
 
-    if (this.state == 'alive') this.draw_ship_normal()
-    else if (this.state == 'dying') this.draw_ship_dying()
+    if(this['draw_ship_'+this.state.state])
+      this['draw_ship_'+this.state.state]()
   }
 
-  draw_ship_dying() {
+  draw_ship_exploding() {
     const delta = this.game.frames - this.dyingStart
     this.game.ctx.beginPath()
     this.game.ctx.moveTo(15-delta,0-delta)
@@ -130,7 +147,7 @@ export default class SpaceShip extends PhysicalObject {
 
   }
 
-  draw_ship_normal() {
+  draw_ship_alive() {
     // spaceship main
     this.game.ctx.beginPath()
     this.game.ctx.moveTo(15,0)

@@ -26,6 +26,7 @@ describe('StateMachine', () => {
       assert.isNotOk(notCalled)
     })
   })
+
   describe('#can', () => {
     it('should work', () => {
       const s = new StateMachine({

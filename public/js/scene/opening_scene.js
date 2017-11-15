@@ -43,11 +43,11 @@ export default class OpeningScene extends Scene {
 
   collided(o1, o2) {
     if (o1 instanceof SpaceShip) {
-      o1.destroy()
+      o1.state.transition('hit')
     }
 
     if (o2 instanceof SpaceShip) {
-      o2.destroy()
+      o2.state.transition('hit')
     }
   }
 

@@ -18,6 +18,7 @@ export default class Scene {
     Combination.twoByTwoOnArray(
       this.gameObjects.filter(g => g.hitbox)
     ).forEach(g => {
+      if (!g[0].hitboxOnMap || !g[1].hitboxOnMap) return
       if (Collision.collide(g[0].hitboxOnMap, g[1].hitboxOnMap)) {
         this.collided(g[0], g[1])
       }

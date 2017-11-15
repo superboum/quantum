@@ -25,10 +25,10 @@ export default class OpeningScene extends Scene {
 
   addMissile(m) {
     this.missiles.push(m)
-    const position = this.gameObjects.length
     this.gameObjects.push(m)
     this.addTrigger(() => {
-      this.gameObjects.splice(position)
+      const position = this.gameObjects.indexOf(m)
+      this.gameObjects.splice(position, 1)
     }, this.game.fps * 3)
   }
 

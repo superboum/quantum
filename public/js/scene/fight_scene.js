@@ -1,6 +1,7 @@
 import Scene from './base_scene.js'
 import SpaceShip from '../physic/spaceship.js'
 import Missile from '../physic/missile.js'
+import Asteroid from '../physic/asteroid.js'
 
 export default class FightScene extends Scene {
   constructor(game) {
@@ -10,6 +11,7 @@ export default class FightScene extends Scene {
       {x: 100, y: 100, angle: Math.PI * 3/4},
       'following'
     )
+    this.spaceship.onGone(() => this.end())
 
     this.ennemy = new SpaceShip(
       this,
@@ -17,9 +19,12 @@ export default class FightScene extends Scene {
       'following'
     )
 
-    this.spaceship.onGone(() => this.end())
-
     this.gameObjects = [this.spaceship, this.ennemy]
+    this.gameObjects.push(new Asteroid(
+      this,
+      {x: -200, y: 0, angle: 0},
+      'following'
+    ))
   }
 
   update() {

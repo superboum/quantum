@@ -1,6 +1,7 @@
 import Scene from './base_scene.js'
 import SpaceShip from '../physic/spaceship.js'
 import Missile from '../physic/missile.js'
+import Typewriter from '../physic/typewriter.js'
 import Asteroid from '../physic/asteroid.js'
 import Random from '../foundation/random.js'
 
@@ -12,6 +13,7 @@ export default class FightScene extends Scene {
     this.my_missiles = []
     this.yours_missiles = []
     this.asteroids = []
+    this.score = {mine: 0, yours: 0}
 
     if (!this.net.initiator) {
       console.log('acting as server')
@@ -19,6 +21,22 @@ export default class FightScene extends Scene {
     } else {
       console.log('acting as client')
     }
+
+    this.scoreDisplay = new Typewriter(
+      this,
+      {
+        x: game.canvas.width / 2,
+        y: 20,
+        angle: 0
+      },
+      {
+        text: '0 - 0',
+        speed: 0.1,
+        font: '20px Hyperspace',
+        baseline: 'top',
+      },
+      'hud'
+    )
 
     this.net.onMessage((msg) => this._handle_data(msg))
   }
@@ -37,6 +55,8 @@ export default class FightScene extends Scene {
 
     this.mine.onGone(() => this._init_game())
     this.yours.onGone(() => this._init_game())
+    this.mine.onGone(() => this.score.yours++)
+    this.yours.onGone(() => this.score.mine++)
   }
 
   _handle_data(msg) {
@@ -46,11 +66,15 @@ export default class FightScene extends Scene {
       this.asteroids = msg.asteroids.map(
         a => Asteroid.deserializeAndCreate(this, a, 'following')
       )
+      this.mine.onGone(() => this.score.yours++)
+      this.yours.onGone(() => this.score.mine++)
     } else if (msg.cmd == 'updt') {
       this.yours.deserialize(msg.mine)
       this.yours_missiles = msg.my_missiles.map(
         m => Missile.deserializeAndCreate(this, m, 'following')
       )
+    } else if (msg.cmd == 'hit') {
+      this.mine.state.transition('hit')
     }
   }
 
@@ -79,6 +103,7 @@ export default class FightScene extends Scene {
     this.gameObjects = [
       this.mine,
       this.yours,
+      this.scoreDisplay,
       ...this.asteroids,
       ...this.my_missiles,
       ...this.yours_missiles
@@ -98,6 +123,8 @@ export default class FightScene extends Scene {
       mine: this.mine.serialize(),
       my_missiles: this.my_missiles.map(m => m.serialize())
     })
+
+    this.scoreDisplay.config.text = this.score.mine + ' - ' + this.score.yours
   }
 
   addMissile(m) {
@@ -114,7 +141,10 @@ export default class FightScene extends Scene {
     const objs = [o1, o2]
     objs.forEach((o, i) => {
       let other = objs[i == 0 ? 1 : 0]
-      if (o instanceof SpaceShip && other.createdBy != o.id) o.state.transition('hit')
+      if (o instanceof SpaceShip && other.createdBy != o.id) {
+        o.state.transition('hit')
+        if (o === this.yours) this.net.send({cmd: 'hit'})
+      }
       if (o instanceof Missile) this.removeMissile(o)
     })
   }

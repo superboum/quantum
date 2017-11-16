@@ -127,6 +127,8 @@ export default class SpaceShip extends PhysicalObject {
   serialize() {
     return {
       pos: this.pos,
+      speed: this.speed,
+      accel: this.accel,
       firing: this.firing,
       thrusting: this.thrusting,
       id: this.id,
@@ -141,7 +143,7 @@ export default class SpaceShip extends PhysicalObject {
   }
 
   deserialize(elem) {
-    ['pos', 'firing', 'thrusting', 'id'].forEach(
+    ['pos', 'firing', 'speed', 'accel', 'thrusting', 'id'].forEach(
       e => this[e] = elem[e]
     )
     //this.state.state = elem.state

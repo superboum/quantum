@@ -17,9 +17,8 @@ export default class Asteroid extends PhysicalObject {
     return {
       radius: this.radius,
       pos: this.pos,
-      shape: this.shape,
+      shape: this.shape.points,
       center: this.center,
-      hibox: this.hitbox
     }
   }
 
@@ -30,7 +29,11 @@ export default class Asteroid extends PhysicalObject {
   }
 
   deserialize(elem) {
-    Object.assign(this, elem)
+    ['radius', 'pos', 'center'].forEach(
+      e => this[e] = elem[e]
+    )
+    this.shape = new Polygon(elem.shape)
+    this.hitbox = this.shape
   }
 
   draw() {

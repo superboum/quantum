@@ -129,7 +129,8 @@ export default class SpaceShip extends PhysicalObject {
       pos: this.pos,
       firing: this.firing,
       thrusting: this.thrusting,
-      id: this.id
+      id: this.id,
+      //state: this.state.state
     }
   }
 
@@ -140,7 +141,10 @@ export default class SpaceShip extends PhysicalObject {
   }
 
   deserialize(elem) {
-    Object.assign(this, elem)
+    ['pos', 'firing', 'thrusting', 'id'].forEach(
+      e => this[e] = elem[e]
+    )
+    //this.state.state = elem.state
   }
 
   draw_ship_exploding() {

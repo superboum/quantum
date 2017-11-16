@@ -18,7 +18,7 @@ export default class Missile extends PhysicalObject {
   serialize() {
     return {
       pos: this.pos,
-      createdBy: this.createdBy
+      createdBy: this.createdBy,
     }
   }
 
@@ -29,7 +29,8 @@ export default class Missile extends PhysicalObject {
   }
 
   deserialize(elem) {
-    Object.assign(this, elem)
+    this.pos = elem.pos
+    this.createdBy = elem.createdBy
   }
 
   draw() {

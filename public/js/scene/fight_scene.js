@@ -7,9 +7,17 @@ import Random from '../foundation/random.js'
 export default class FightScene extends Scene {
   constructor(game, net) {
     super(game)
+
     this.net = net
+    this.my_missiles = []
+    this.yours_missiles = []
+    this.asteroids = []
+
     if (!this.net.initiator) {
+      console.log('acting as server')
       this._init_game()
+    } else {
+      console.log('acting as client')
     }
 
     this.net.onMessage((msg) => this._handle_data(msg))
@@ -29,9 +37,6 @@ export default class FightScene extends Scene {
 
     this.mine.onGone(() => this._init_game())
     this.yours.onGone(() => this._init_game())
-
-    this.gameObjects = [this.mine, this.yours]
-    this.gameObjects = this.gameObjects.concat(this.asteroids)
   }
 
   _handle_data(msg) {
@@ -41,22 +46,18 @@ export default class FightScene extends Scene {
       this.asteroids = msg.asteroids.map(
         a => Asteroid.deserializeAndCreate(this, a, 'following')
       )
-      this.gameObjects = [this.mine, this.yours]
-      this.gameObjects = this.gameObjects.concat(this.asteroids)
     } else if (msg.cmd == 'updt') {
       this.yours.deserialize(msg.mine)
-      this.gameObjects = this.gameObjects
-        .filter(g => !(g instanceof Missile) || g.local)
-        .concat(msg.my_missiles
-          .map(m => Missile.deserializeAndCreate(this,m,'following'))
-        )
+      this.yours_missiles = msg.my_missiles.map(
+        m => Missile.deserializeAndCreate(this, m, 'following')
+      )
     }
   }
 
   _generate_spaceships() {
     return [
       {x: 0, y: 0, angle: Math.PI / 2},
-      {x: 300, y: 0, angle: -Math.PI / 2}
+      {x: 600, y: 0, angle: -Math.PI / 2}
     ].map((p, i) => {
       let s = new SpaceShip(this, p, 'following')
       s.id = i
@@ -65,16 +66,24 @@ export default class FightScene extends Scene {
   }
 
   _generate_asteroids() {
-    return [...Array(20).keys()].map(i =>
+    return [...Array(25).keys()].map(i =>
       new Asteroid(
         this,
-        {x: Random.uniform(0,2000), y: Random.uniform(-1000,1000), angle: 0},
+        {x: Random.uniform(-1000,1600), y: Random.uniform(-1000,1000), angle: 0},
         Random.uniform(15,40),
         'following'
       ))
   }
 
   update() {
+    this.gameObjects = [
+      this.mine,
+      this.yours,
+      ...this.asteroids,
+      ...this.my_missiles,
+      ...this.yours_missiles
+    ]
+
     super.update()
     this.cameras['following'].centerOn = this.mine
     if (!(this.mine && this.yours && this.asteroids)) return
@@ -87,20 +96,18 @@ export default class FightScene extends Scene {
     this.net.send({
       cmd: 'updt',
       mine: this.mine.serialize(),
-      my_missiles: this.gameObjects
-        .filter(g => g instanceof Missile && g.local)
-        .map(m => m.serialize())
+      my_missiles: this.my_missiles.map(m => m.serialize())
     })
   }
 
   addMissile(m) {
-    this.gameObjects.push(m)
+    this.my_missiles.push(m)
     this.addTrigger(() => this.removeMissile(m), this.game.fps * 3)
   }
 
   removeMissile(m) {
-    const position = this.gameObjects.indexOf(m)
-    position == -1 || this.gameObjects.splice(position, 1)
+    const position = this.my_missiles.indexOf(m)
+    position == -1 || this.my_missiles.splice(position, 1)
   }
 
   collided(o1, o2) {
